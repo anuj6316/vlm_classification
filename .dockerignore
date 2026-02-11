@@ -1,0 +1,37 @@
+# ============================================================
+# Docker Build Context Exclusions
+# Keep the build context small for faster builds
+# ============================================================
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.mypy_cache
+.ruff_cache
+.pytest_cache
+
+# Environment
+.env
+.venv
+venv
+
+# IDE
+.vscode
+.idea
+
+# Output and data (mounted as volumes, not baked into image)
+input/
+output/
+models/
+
+# Docs and misc
+docs/
+*.md
+!README.md
+LICENSE

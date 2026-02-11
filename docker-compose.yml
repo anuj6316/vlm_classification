@@ -1,0 +1,65 @@
+# ============================================================
+# VLM Classification — Docker Compose
+# ============================================================
+# One-command launch for the OCR pipeline with GPU support.
+#
+# Usage:
+#   docker compose build                          # Build the image
+#   docker compose run --rm ocr extract <file>    # Run OCR on a file
+#   docker compose run --rm ocr health            # Check system status
+#   docker compose run --rm ocr benchmark <dir>   # Run benchmarks
+# ============================================================
+
+services:
+  # Persistent OCR server — keeps the model loaded in GPU memory
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - ./models/paddlex:/home/paddleocr/.paddlex
+      - ./models/cache:/home/paddleocr/.cache
+      - ./src:/app/src
+      - ./cli:/app/cli
+      - ./config:/app/config
+    env_file:
+      - .env
+    environment:
+      - HF_ENDPOINT=https://hf-mirror.com
+      - PADDLE_PDX_MODEL_SOURCE=ModelScope
+      - MODELSCOPE_CACHE=/home/paddleocr/.cache/modelscope
+    shm_size: '4gb'
+    command: ["serve", "--host", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "python", "-m", "cli.main", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # CLI client — runs OCR on documents by connecting to the persistent server
+  ocr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+      - ./src:/app/src
+      - ./cli:/app/cli
+      - ./config:/app/config
+    env_file:
+      - .env
+    environment:
+      - OCR_SERVER_URL=http://server:8100
+      - OCR_AUTO_START=false
+    depends_on:
+      server:
+        condition: service_healthy
+

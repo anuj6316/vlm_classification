@@ -1,0 +1,32 @@
+# ============================================================
+# VLM Classification — Git Ignore
+# ============================================================
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Environment
+.env
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Data directories (user-specific, mounted as volumes)
+input/
+output/
+models/
+
+# OS
+.DS_Store
+Thumbs.db
