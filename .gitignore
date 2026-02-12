@@ -30,3 +30,6 @@ models/
 # OS
 .DS_Store
 Thumbs.db
+
+olmocr_model/
+olmocr_model/*

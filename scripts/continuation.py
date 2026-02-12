@@ -15,7 +15,7 @@ from pypdf import PdfReader
 
 def process_and_save_results(pdf_path, output_csv="results.csv"):
     # 1. Load Model in 4-bit
-    model_id = "allenai/olmOCR-2-7B-1025"
+    model_id = "./olmocr_model"
     print(f"Loading {model_id}...")
     
     quantization_config = BitsAndBytesConfig(
