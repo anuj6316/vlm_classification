@@ -19,7 +19,7 @@
 import subprocess
 from huggingface_hub import HfApi
 
-repo_id = "allenai/olmOCR-2-7B-1025"
+repo_id = "Qwen/Qwen3-ASR-0.6B"
 
 api = HfApi()
 
@@ -28,7 +28,7 @@ files = api.list_repo_files(repo_id)
 # Filter large useful files
 files = [f for f in files if not f.endswith(".md")]
 
-download_dir = "./olmocr_model"
+download_dir = "./Qwen3-ASR-0.6B_model"
 
 for file in files:
     url = f"https://huggingface.co/{repo_id}/resolve/main/{file}"

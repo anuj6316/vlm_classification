@@ -27,6 +27,7 @@ def process_and_save_results(pdf_path, output_csv="results.csv"):
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
         model_id,
         quantization_config=quantization_config,
+        # use_fast=True,
         device_map="auto"
     ).eval()
 
